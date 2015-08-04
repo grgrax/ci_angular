@@ -19,43 +19,32 @@ class api extends DB_REST_Controller
         // $this->response(array('data'=>$articles), 200);             
     }
 
-    function add_post($article)
+    function add_post()
     {
-        show_pre($article);
-        echo json_encode($article);
-        $model=$this->load->model('article/article_m');
-        if($article){
+        try {
+           
+            $model=$this->load->model('article/article_m');
+            $params = json_decode(file_get_contents('php://input'),true);
+            
+            // $this->response(array('success'=>true,'data'=>$params['name']), 200);                          
+
             $data['insert_data']=array(
-                'name'=>$article.name,
-                'slug'=>$article.name,
-                'content'=>$article.content,
-                'status'=>1,
+                'name'=>$params['name']?:null,
+                'slug'=>$params['name']?get_slug($params['name']):null,
+                'content'=>$params['content']?:null,
+                'status'=>$model::PUBLISHED,
                 );
-            // $path=get_relative_upload_file_path();
-            // $path.=$model::file_path;
-            // if($_FILES['image']['name']){
-            //     upload_picture($model->path,'image');
-            // }
+
             $model->create_row($data['insert_data']);
-            $article=$model->read_row_by_slug($this->post('slug'));
-            // $this->response(array('data'=>$article), 200);             
-            echo json_encode($article);
-        } 
-        // else{
-        //     $article=$this->load->model('article/article_m')->read_row_by_slug($this->post('slug'));
-        //     if($article){
-        //         $this->template_data['update_data']=array(
-        //             'image_title'=>$this->post('image_title'),
-        //             );
-        //         $path=get_relative_upload_file_path();
-        //         $this->load->model('article/article_m')->update_row($article['id'],$this->template_data['update_data']);
-        //         $article=$this->load->model('article/article_m')->read_row_by_slug($this->post('slug'));
-        //         $this->response(array('data'=>$article), 200); 
-        //     }
-        //     else{
-        //         $this->response(array('error' => 'article could not be found','slug'=>$this->post('slug')), 404);
-        //     }  
-        // }
+            $article=$model->read_row_by_slug($data['insert_data']['slug']);
+            if($article)
+                $this->response(array('success'=>true,'data'=>$article), 200);             
+            else
+                $this->response(array('success'=>false,'error'=>'Could not add article'), 200);
+
+        } catch (Exception $e) {
+            $this->response(array('success'=>false,'error'=>$e->getMessage()), 200);             
+        }
     }
 
 
