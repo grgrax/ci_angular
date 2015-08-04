@@ -1,19 +1,21 @@
 
 <div class="panel panel-default table-responsive">
     <div class="panel-heading">
-        Fund Categories
-        <span class="badge badge-info"><?=$total?></span>
+        <h3>Articles</h3>
+        <hr>
+        <h4>Create Article</h4>
         <hr>
         <form role="form" ng-submit="addTask()">
             <div class="form-group">
                 <input type="text" class="form-control" name="name" 
-                ng-model="name" placeholder="Enter name" required>
+                ng-model="name" placeholder="Name here" required>
             </div>    
             <div class="form-group">
-                <input type="text" class="form-control" name="content" 
-                ng-model="content" placeholder="Enter content" required>
+            <textarea name="content" class="form-control" id="" cols="30" rows="4" 
+                placeholder="Content here"
+                ng-model="content" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Add task</button>
+            <button type="submit" class="btn btn-primary" name="add">Add</button>
         </form>
     </div>
     <div class="panel-body">
@@ -21,21 +23,18 @@
             <thead>
                 <tr>
                     <th class="center">s.no</th>
-                    <th>name</th>
-                    <th>status(active)</th>
-                    <th>created at</th>
-                    <th>actions</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Created at</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="task in tasks">
                     <td>{{$index+1}}</td>
-                    <td>
-                        <input class="todo" type="text" 
-                        ng-model-options="{ updateOn: 'blur' }" 
-                        ng-change="updateTask(tasks[$index])" 
-                        ng-model="tasks[$index].name">
-                    </td>
+                    <td>{{task.name}}</td>
+                    <td>{{task.status}}</td>
+                    <td>{{task.created_at}}</td>
                     <td style="text-align:center">
                         <input class="todo" type="checkbox" 
                         ng-cha
