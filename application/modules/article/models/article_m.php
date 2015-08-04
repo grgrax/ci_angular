@@ -98,6 +98,18 @@ class article_m extends CI_Model
 		}	
 	}
 
+	public function read_row_by_slug($slug='')
+	{
+		if(!$slug) return false;
+		$this->db->select()
+		->from($this->table)
+		->where('slug',$slug);
+		$rs=$this->db->get();
+		if($rs->num_rows()==0)
+			return false;
+		return ($rs->first_row('array'));
+	}
+
 	function update_row($id,$data)
 	{
 		try {
