@@ -50,6 +50,16 @@ articleApp.controller('ArticleCtrl', function ($scope, $http) {
         });
     }
 
+    $scope.loadArticle = function(slug){
+        console.log(slug);
+        $http.get('article/api/index/'+slug).success(function(data){
+            console.log(data);
+            $scope.article = data;
+        }).error(function(data){
+            $scope.article = data;
+        });
+    }
+
     $scope.editArticle = function(article){
         var oldArticle = {'name': article.name,'content': article.content};
         console.log(oldArticle);

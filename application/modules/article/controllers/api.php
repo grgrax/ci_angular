@@ -9,14 +9,22 @@ class api extends DB_REST_Controller
         parent::__construct();
     }
 
-    public function index_get()
+    public function index_get($slug=null)
     {
         $model=$this->load->model('article/article_m');
-        $articles=$model->read_all(100,0);
-        if(!$articles) $this->response(array('nodata' => 'No articles'), 404);
+        if($slug){
+            $article=$model->read_row_by_slug($slug);
+            if($article)
+                $this->response(array('success'=>true,'data'=>$article), 200);             
+            else
+                $this->response(array('success'=>false,'error'=>'Could not add article'), 200);
+        }else{
+            $articles=$model->read_all(100,0);
+            if(!$articles) $this->response(array('nodata' => 'No articles'), 404);
         // $r = new ReflectionClass($model);
-        echo json_encode($articles);
-        // $this->response(array('data'=>$articles), 200);             
+            echo json_encode($articles);
+        // $this->response(array('data'=>$articles), 200);                     
+        }
     }
 
     function add_post()
