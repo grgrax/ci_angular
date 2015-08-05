@@ -17,7 +17,7 @@
                 Filter 
             </h4>
             <div class="checkbox">
-                <label><input type="checkbox" ng-model="advanced_filter">Advanced Filter</label>
+                <label><input type="checkbox" ng-model="advanced_filter" checked="checked">Advanced Filter</label>
             </div>   
             <hr>
             <div class="col-sm-12 col-md-6 col-lg-3 form-group">
@@ -34,68 +34,67 @@
                     ng-model="filter_date" placeholder="By date" />
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-3 form-group">
-                  <select class="form-control" ng-model="filter_status">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                </select>
-            </div>                
-        </span> 
-    </form>
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="center">#</th>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Created at</th>
-                <th>Publish</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="article in articles | filter:filter_name | filter:filter_content | filter:filter_date | orderBy : 'name'">
-                <td>{{$index+1}}</td>
-                <td>{{article.name | uppercase}}</td>
-                <td>
-                    <span ng-if="article.status==1" class="label label-table label-warning">
-                        Unpublished
-                    </span>
-                    <span ng-if="article.status==2" class="label label-table label-success">
-                        Published
-                    </span>
-                    <span ng-if="article.status==3" class="label label-table label-danger">
-                        Deleted
-                    </span>
-                    <!-- <span class="label label-table label-<?=$class?>"><?=$status?></span> -->
-                </td>
-                <td>{{article.created_at}}</td>
-                <td style="text-align:center">
-                    <span ng-if="article.status!=3">
-                        <input class="todo" type="checkbox" 
-                        ng-cha
-                        nge="publisharticle(articles[$index])"
-                        ng-model="articles[$index].status" 
-                        ng-true-value="'2'" 
-                        ng-false-value="'1'">
-                    </span>                    
-                </td>
-                <td style="text-align:center">
-                    <span ng-if="article.status==2">
-                        <a class="btn btn-xs btn-default"
-                        data-toggle="modal" 
-                        data-target="#edit_form" 
-                        ng-click="loadArticle(article.slug)"
-                        >Edit</a>
-                        &nbsp;
-                        <a class="btn btn-xs btn-danger" 
-                        ng-click="removeArticle(articles[$index])">Delete</a>
-                    </span>
-                </td>                    
-            </tr>
-        </tbody>
-    </table>
-</div>
+                    <select class="form-control" ng-model="filter_status">
+                        <option value="" selected="selected">-- Select Status --</option>                        
+                        <option ng-repeat="status in all_status" value="{{status.key}}">{{status.value}}</option>
+                    </select>
+                </div>                
+            </span> 
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="center">#</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Created at</th>
+                    <th>Publish</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="article in articles | filter:filter_name | filter:filter_content | filter:filter_date | orderBy : 'name'">
+                    <td>{{$index+1}}</td>
+                    <td>{{article.name | uppercase}}</td>
+                    <td>
+                        <span ng-if="article.status==1" class="label label-table label-warning">
+                            Unpublished
+                        </span>
+                        <span ng-if="article.status==2" class="label label-table label-success">
+                            Published
+                        </span>
+                        <span ng-if="article.status==3" class="label label-table label-danger">
+                            Deleted
+                        </span>
+                        <!-- <span class="label label-table label-<?=$class?>"><?=$status?></span> -->
+                    </td>
+                    <td>{{article.created_at}}</td>
+                    <td style="text-align:center">
+                        <span ng-if="article.status!=3">
+                            <input class="todo" type="checkbox" 
+                            ng-cha
+                            nge="publisharticle(articles[$index])"
+                            ng-model="articles[$index].status" 
+                            ng-true-value="'2'" 
+                            ng-false-value="'1'">
+                        </span>                    
+                    </td>
+                    <td style="text-align:center">
+                        <span ng-if="article.status==2">
+                            <a class="btn btn-xs btn-default"
+                            data-toggle="modal" 
+                            data-target="#edit_form" 
+                            ng-click="loadArticle(article.slug)"
+                            >Edit</a>
+                            &nbsp;
+                            <a class="btn btn-xs btn-danger" 
+                            ng-click="removeArticle(articles[$index])">Delete</a>
+                        </span>
+                    </td>                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
