@@ -6,9 +6,13 @@ articleApp.controller('ArticleCtrl', function ($scope, $http) {
     $http.get('article/api/index').success(function(data){
         $scope.articles = data;
         $scope.all_status =[
-        {key:'1',value:'Unpublished'},
-        {key:'2',value:'Active'},
-        {key:'3',value:'Deleted'}];
+        {key:'Unpublished',value:'Unpublished'},
+        {key:'Published',value:'Published'},
+        {key:'Deleted',value:'Deleted'}];
+        // $scope.all_status =[
+        // {key:'1',value:'Unpublished'},
+        // {key:'2',value:'Active'},
+        // {key:'3',value:'Deleted'}];
     }).error(function(data){
         $scope.articles = data;
     });

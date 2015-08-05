@@ -1,7 +1,7 @@
-<!-- <p>Remove icon: <span class="glyphicon glyphicon-remove"></span></p>    
--->      
-
 <div class="panel panel-default table-responsive">
+
+    <div ng-include="'angular/static_views/about.php'"></div>
+
     <div class="panel-heading">
         <h3>
             Articles 
@@ -20,20 +20,20 @@
                 <label><input type="checkbox" ng-model="advanced_filter" checked="checked">Advanced Filter</label>
             </div>   
             <hr>
-            <div class="col-sm-12 col-md-6 col-lg-3 form-group">
+            <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                 <input type="text" class="form-control" name="name" 
                 ng-model="filter_name" placeholder="By name" />
             </div>   
             <span ng-show="advanced_filter">
-                <div class="col-sm-12 col-md-6 col-lg-3 form-group">
+               <!--  <div class="col-sm-12 col-md-6 col-lg-3 form-group">
                     <input type="text" class="form-control" name="content" 
                     ng-model="filter_content" placeholder="By content" />
-                </div>   
-                <div class="col-sm-12 col-md-6 col-lg-3 form-group">
+                </div> -->   
+                <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                     <input type="text" class="form-control" name="date" 
                     ng-model="filter_date" placeholder="By date" />
                 </div>
-                <div class="col-sm-12 col-md-6 col-lg-3 form-group">
+                <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                     <select class="form-control" ng-model="filter_status">
                         <option value="" selected="selected">-- Select Status --</option>                        
                         <option ng-repeat="status in all_status" value="{{status.key}}">{{status.value}}</option>
@@ -71,7 +71,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="article in articles | filter:filter_name | filter:filter_content | filter:filter_date | orderBy : 'name'">
+            <tr ng-repeat="article in articles | filter:filter_name | filter:filter_content | filter:filter_date | filter:filter_status | orderBy : 'name'">
                 <td>{{$index+1}}</td>
                 <td>{{article.name | uppercase}}</td>
                 <td>
