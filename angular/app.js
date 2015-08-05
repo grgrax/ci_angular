@@ -1,5 +1,41 @@
 var articleApp = angular.module('articleApp', []);
 
+// http://www.amitavroy.com/justread/content/articles/ajax-data-using-angular-js-http-and-use-route-service-inside-codeigniter
+// var articleApp = angular.module('articleApp', ['ngRoute']);
+//routes
+// articleApp.config(function($routeProvider){
+//     $routeProvider
+    
+//     .when('/',{
+//         // templateUrl:'',
+//         controller:'ArticleCtrl'
+//     })
+
+//     .when('/',{
+//         templateUrl:'http://localhost/cel/2015/aug/prac/ci_ang/static_views/about.php',
+//         controller:'aboutController'
+//     })
+
+//     .when('/contact',{
+//         templateUrl:'http://localhost/cel/2015/aug/prac/ci_ang/static_views/contact.php',
+//         controller:'contactController'
+//     })
+// });
+
+// // //controllers
+// articleApp.controller('mainController',function($scope){
+//     $scope.message="home page";
+// });
+
+// articleApp.controller('aboutController',function($scope){
+//     $scope.message="about page";
+// });
+
+// articleApp.controller('contactController',function($scope){
+//     $scope.message="contact page";
+// });
+
+
 articleApp.controller('ArticleCtrl', function ($scope, $http) {
 
 
