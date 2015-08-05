@@ -167,7 +167,7 @@
                         <div class="form-group">
                             <input type="text" class="form-control" name="name" 
                             ng-model="name" placeholder="Name here" required>
-                            <span style="color:red" ng-show="add_article_form.name.$dirty && add_article_form.name.$invalid">
+                            <span style="color:red" ng-show="add_article_form.name.$pristine && add_article_form.name.$dirty && add_article_form.name.$invalid">
                               <span ng-show="add_article_form.name.$error.required">Name is required.</span>
                           </span>
                       </div>    
@@ -175,7 +175,7 @@
                         <textarea name="content" class="form-control" id="" cols="30" rows="4" 
                         placeholder="Content here"
                         ng-model="content" required></textarea>
-                        <span style="color:red" ng-show="add_article_form.content.$dirty && add_article_form.content.$invalid">
+                        <span style="color:red" ng-show="add_article_form.content.$pristine && add_article_form.content.$dirty && add_article_form.content.$invalid">
                             <span ng-show="add_article_form.content.$error.required">Content is required.</span>
                         </span>
                     </div>
