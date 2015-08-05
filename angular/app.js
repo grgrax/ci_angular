@@ -1,45 +1,64 @@
-var todoApp = angular.module('todoApp', []);
- 
-todoApp.controller('TodoCtrl', function ($scope, $http) {
- 
-    $http.get('todo/api/index').success(function(data){
-        $scope.tasks = data;
+var articleApp = angular.module('articleApp', []);
+
+articleApp.controller('ArticleCtrl', function ($scope, $http) {
+
+    $http.get('article/api/index').success(function(data){
+        $scope.articles = data;
     }).error(function(data){
-        $scope.tasks = data;
+        $scope.articles = data;
     });
- 
+
     $scope.refresh = function(){
-        $http.get('todo/api/index').success(function(data){
-            $scope.tasks = data;
+        $http.get('article/api/index').success(function(data){
+            $scope.articles = data;
         }).error(function(data){
-            $scope.tasks = data;
+            $scope.articles = data;
         });
     }
- 
-    $scope.addTask = function(){
-        var newTask = {'name': $scope.name,'content': $scope.content};
-        console.log(newTask);
-        $http.post('todo/api/add', newTask).success(function(data){
+
+    $scope.addArticle = function(){
+        var newArticle = {'name': $scope.name,'content': $scope.content};
+        console.log(newArticle);
+        $http.post('article/api/add', newArticle).success(function(data){
             $scope.refresh();
             $scope.name = '';
             $scope.content = '';
-            // alert(data);
-            // console.log(data);
         }).error(function(data){
             alert(data.error);
         });
     }
- 
-    $scope.deleteTask = function(task){
-        $http.delete('todo/tasks/' + task.id);
-        $scope.tasks.splice($scope.tasks.indexOf(task),1);
-    }
- 
-    $scope.updateTask = function(task){
-        $http.put('todo/tasks', task).error(function(data){
+
+    $scope.removeArticle = function(article){
+        var oldArticle = {'slug': article.slug};
+        console.log(oldArticle);
+        $http.post('article/api/remove', oldArticle).success(function(data){
+            $scope.refresh();
+            console.log(data);
+        }).error(function(data){
             alert(data.error);
         });
-        $scope.refresh();
     }
- 
+
+    $scope.publishArticle = function(article){
+        var oldArticle = {'slug': article.slug};
+        console.log(oldArticle);
+        $http.post('article/api/publish', oldArticle).success(function(data){
+            $scope.refresh();
+            console.log(data);
+        }).error(function(data){
+            alert(data.error);
+        });
+    }
+
+    $scope.editArticle = function(article){
+        var oldArticle = {'name': article.name,'content': article.content};
+        console.log(oldArticle);
+        $http.put('article/api/edit', oldArticle).success(function(data){
+            $scope.refresh();
+            console.log(data);
+        }).error(function(data){
+            alert(data.error);
+        });
+    }
+
 });
