@@ -9,94 +9,136 @@ class api extends DB_REST_Controller
         parent::__construct();
     }
 
-    public function index_get_()
-    {        
-        if(!$this->get('slug')) $this->response(array('invalid paramerter'), 400);
-        $article=$this->load->model('article/article_m')->read_row_by_slug($this->get('slug'));
-        if(!$article) $this->response(array('error'=>'article could not be found'), 404);
-        $this->response(array('data'=>$article), 200); 
-    }
-
     public function index_get()
     {
         $model=$this->load->model('article/article_m');
         $articles=$model->read_all(100,0);
         if(!$articles) $this->response(array('nodata' => 'No articles'), 404);
-        $r = new ReflectionClass($model);
-        $response=array(
-            'data'=>$articles,
-            'model'=>array(
-                'status'=>$model::status(),
-                'actions'=>$model::actions(),
-                'constant'=>$model::getConstants(),
-                'rules'=>$model->get_rules(),
-                )
-            );
-        $this->response($response, 200); 
+        // $r = new ReflectionClass($model);
+        echo json_encode($articles);
+        // $this->response(array('data'=>$articles), 200);             
     }
 
-    public function refresh_get()
+    function add_post()
     {
-        $model=$this->load->model('article/article_m');
-        $articles=$model->read_all(100,0);
-        if(!$articles) $this->response(array('nodata' => 'No articles'), 404);
-        $r = new ReflectionClass($model);
-        $response=array(
-            'data'=>$articles,
-            'model'=>array(
-                'status'=>$model::status(),
-                'actions'=>$model::actions(),
-                'constant'=>$model::getConstants(),
-                'rules'=>$model->get_rules(),
-                )
-            );
-        $this->response($response, 200); 
-    }
+        try {
 
-    function article_post()
-    {
-        $model=$this->load->model('article/article_m');
-        if(!$this->post('slug')) $this->response(NULL, 400);
-        if($this->post('add')){
+            $model=$this->load->model('article/article_m');
+            $params = json_decode(file_get_contents('php://input'),true);
+            
+            // $this->response(array('success'=>true,'data'=>$params['name']), 200);                          
+
             $data['insert_data']=array(
-                'parent_id'=>$this->input->post('parent_id')?$this->input->post('parent_id'):NULL,
-                'name'=>$this->input->post('name'),
-                'slug'=>$this->input->post('slug'),
-                'content'=>$this->input->post('content'),
-                'image'=>$_FILES['image']['name'],
-                'image_title'=>$this->input->post('image_title'),
-                'url'=>$this->input->post('url'),
-                'order'=>$this->input->post('order'),
-                'published'=>$this->input->post('published'),
-                //'author'=>$current_user['id'],
-                'status'=>$this->input->post('status'),
+                'name'=>$params['name']?:null,
+                'slug'=>$params['name']?get_slug($params['name']):null,
+                'content'=>$params['content']?:null,
+                'status'=>$model::PUBLISHED,
                 );
-            $path=get_relative_upload_file_path();
-            $path.=$model::file_path;
-            if($_FILES['image']['name']){
-                upload_picture($model->path,'image');
-            }
+
             $model->create_row($data['insert_data']);
-            $article=$model->read_row_by_slug($this->post('slug'));
-            $this->response(array('data'=>$article), 200);             
-        } 
-        else{
-            $article=$this->load->model('article/article_m')->read_row_by_slug($this->post('slug'));
-            if($article){
-                $this->template_data['update_data']=array(
-                    'image_title'=>$this->post('image_title'),
-                    );
-                $path=get_relative_upload_file_path();
-                $this->load->model('article/article_m')->update_row($article['id'],$this->template_data['update_data']);
-                $article=$this->load->model('article/article_m')->read_row_by_slug($this->post('slug'));
-                $this->response(array('data'=>$article), 200); 
-            }
-            else{
-                $this->response(array('error' => 'article could not be found','slug'=>$this->post('slug')), 404);
-            }  
+            $article=$model->read_row_by_slug($data['insert_data']['slug']);
+            if($article)
+                $this->response(array('success'=>true,'data'=>$article), 200);             
+            else
+                $this->response(array('success'=>false,'error'=>'Could not add article'), 200);
+
+        } catch (Exception $e) {
+            $this->response(array('success'=>false,'error'=>$e->getMessage()), 200);             
         }
     }
 
+    function edit_post()
+    {
+        try {
+
+            $article=$model->read_row_by_slug($params['name']);
+            
+            if(!$article){
+                throw new Exception("No article found", 1);
+            }
+
+            $model=$this->load->model('article/article_m');
+
+            $params = json_decode(file_get_contents('php://input'),true);
+            
+            $this->response(array('success'=>true,'data'=>$article), 200);                          
+
+            $data['update_data']=array(
+                'name'=>$params['name']?:null,
+                'slug'=>$params['name']?get_slug($params['name']):null,
+                'content'=>$params['content']?:null,
+                'status'=>$model::PUBLISHED,
+                );
+
+            $updated=$model->update_row($data['update_data'],$article['id']);
+
+            if($updated)
+                $this->response(array('success'=>true,'data'=>$params['name']." (Article) successfully updated"), 200);             
+            else
+                $this->response(array('success'=>false,'error'=>'Could not update article'), 200);
+
+        } catch (Exception $e) {
+            $this->response(array('success'=>false,'error'=>"Could not edit article, {$e->getMessage()}"), 200);             
+        }
+    }
+
+    function remove_post()
+    {
+        try {
+
+            $params = json_decode(file_get_contents('php://input'),true);
+
+            $model=$this->load->model('article/article_m');
+
+            $article=$model->read_row_by_slug($params['slug']);
+            
+            if(!$article)
+                throw new Exception("No article found", 1);
+
+            $data['update_data']=array(
+                'status'=>$model::DELETED,
+                );
+
+            $updated=$model->update_row($article['id'],$data['update_data']);
+
+            if($updated)
+                $this->response(array('success'=>true,'data'=>$params['name']." (Article) successfully removed"), 200);             
+            else
+                $this->response(array('success'=>false,'error'=>'Could not update article'), 200);
+
+        } catch (Exception $e) {
+            $this->response(array('success'=>false,'error'=>"Could not remove article, {$e->getMessage()}"), 200);             
+        }
+    }
+
+    function publish_post()
+    {
+        try {
+
+            $params = json_decode(file_get_contents('php://input'),true);
+
+            $model=$this->load->model('article/article_m');
+
+            $article=$model->read_row_by_slug($params['slug']);
+            
+            if(!$article)
+                throw new Exception("No article found", 1);
+
+            $data['update_data']=array(
+                'status'=>$model::PUBLISHED,
+                );
+
+            $updated=$model->update_row($article['id'],$data['update_data']);
+
+            if($updated)
+                $this->response(array('success'=>true,'data'=>$params['name']." (Article) successfully removed"), 200);             
+            else
+                $this->response(array('success'=>false,'error'=>'Could not update article'), 200);
+
+        } catch (Exception $e) {
+            $this->response(array('success'=>false,'error'=>"Could not remove article, {$e->getMessage()}"), 200);             
+        }
+    }
 
 
 }
