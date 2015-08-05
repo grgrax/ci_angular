@@ -22,7 +22,7 @@ class api extends DB_REST_Controller
     function add_post()
     {
         try {
-           
+
             $model=$this->load->model('article/article_m');
             $params = json_decode(file_get_contents('php://input'),true);
             
@@ -47,6 +47,76 @@ class api extends DB_REST_Controller
         }
     }
 
+    function edit_post()
+    {
+        try {
+
+            $article=$model->read_row_by_slug($params['name']);
+            
+            if(!$article){
+                throw new Exception("No article found", 1);
+            }
+
+            $model=$this->load->model('article/article_m');
+
+            $params = json_decode(file_get_contents('php://input'),true);
+            
+            $this->response(array('success'=>true,'data'=>$article), 200);                          
+
+            $data['update_data']=array(
+                'name'=>$params['name']?:null,
+                'slug'=>$params['name']?get_slug($params['name']):null,
+                'content'=>$params['content']?:null,
+                'status'=>$model::PUBLISHED,
+                );
+
+            $updated=$model->update_row($data['update_data'],$article['id']);
+
+            if($updated)
+                $this->response(array('success'=>true,'data'=>$params['name']." (Article) successfully updated"), 200);             
+            else
+                $this->response(array('success'=>false,'error'=>'Could not update article'), 200);
+
+        } catch (Exception $e) {
+            $this->response(array('success'=>false,'error'=>"Could not edit article, {$e->getMessage()}"), 200);             
+        }
+    }
+
+    function remove_delete()
+    {
+        try {
+
+            $article=$model->read_row($params['id']);
+            
+            if(!$article){
+                throw new Exception("No article found", 1);
+            }
+            $this->response(array('success'=>true,'data'=>$params['name']." (Article) successfully updated"), 200);             
+
+            $model=$this->load->model('article/article_m');
+
+            $params = json_decode(file_get_contents('php://input'),true);
+            
+            $this->response(array('success'=>true,'data'=>$article), 200);                          
+
+            $data['update_data']=array(
+                'name'=>$params['name']?:null,
+                'slug'=>$params['name']?get_slug($params['name']):null,
+                'content'=>$params['content']?:null,
+                'status'=>$model::PUBLISHED,
+                );
+
+            $updated=$model->update_row($data['update_data'],$article['id']);
+
+            if($updated)
+                $this->response(array('success'=>true,'data'=>$params['name']." (Article) successfully updated"), 200);             
+            else
+                $this->response(array('success'=>false,'error'=>'Could not update article'), 200);
+
+        } catch (Exception $e) {
+            $this->response(array('success'=>false,'error'=>"Could not edit article, {$e->getMessage()}"), 200);             
+        }
+    }
 
 
 }

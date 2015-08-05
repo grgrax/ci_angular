@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="todoApp">
+<html lang="en" data-ng-app="articleApp">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
 	<script src="<?php echo assets('js/bootstrap.min.js');?>"></script>
 
 </head>
-<body data-ng-controller="TodoCtrl">
+<body data-ng-controller="ArticleCtrl">
 	<div class="container">
 		<div class="row">
 			<h3>CI-Angular Demo App</h3>
