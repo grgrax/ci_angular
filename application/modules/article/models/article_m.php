@@ -61,6 +61,20 @@ class article_m extends CI_Model
 		->order_by('id','desc');
 		$rs=$this->db->get();
 		return $rs->num_rows();				 
+	}
+
+	function read_rows_by($param,$limit=null,$offset=null){
+		try {
+			if(!is_array($param)) throw new Exception("Error Processing Request, no array", 1);	
+			$rs = $this->db->get_where($this->table, $param, $limit, $offset);
+			if($limit==1 && $rs->num_rows()==1)
+				return $rs->first_row('array');
+			else
+				return $rs->result_array();		
+		} catch (Exception $e) {
+			$this->session->set_flashdata('error', $e->getMessage());			
+			redirect();
+		}	
 	}	
 	function read_all_filter($limit=0,$offset=0,$filters=null)
 	{
@@ -84,19 +98,6 @@ class article_m extends CI_Model
 		$this->db->insert($this->table,$data);
 	}
 
-	function read_rows_by($param,$limit=null,$offset=null){
-		try {
-			if(!is_array($param)) throw new Exception("Error Processing Request, no array", 1);	
-			$rs = $this->db->get_where($this->table, $param, $limit, $offset);
-			if($limit==1 && $rs->num_rows()==1)
-				return $rs->first_row('array');
-			else
-				return $rs->result_array();	
-		} catch (Exception $e) {
-			$this->session->set_flashdata('error', $e->getMessage());			
-			redirect();
-		}	
-	}
 
 	public function read_row_by_slug($slug='')
 	{
@@ -115,6 +116,7 @@ class article_m extends CI_Model
 		try {
 			$this->db->where('id',$id);
 			$this->db->update($this->table,$data);
+			// return ($this->db->affected_rows() > 0) ? TRUE : FALSE; 
 		} catch (Exception $e) {
 			echo $e->getMessage();			
 		}
