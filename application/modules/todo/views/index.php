@@ -1,6 +1,6 @@
 <div class="panel panel-default table-responsive">
 
-    <div ng-include="'angular/static_views/about.php'"></div>
+    <div ng-view></div>
 
     <div class="panel-heading">
         <h3>

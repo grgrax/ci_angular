@@ -19,9 +19,9 @@
 
 			<br>
 			<ul class="nav nav-pills">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#about">About Us</a></li>
-				<li><a href="#contact">Contact</a></li>
+				<li class="active"><a href="#/">Home</a></li>
+				<li><a href="#/about">About Us</a></li>
+				<li><a href="#/contact">Contact</a></li>
 			</ul>
 
 			<h3>CI-Angular Demo App</h3>
