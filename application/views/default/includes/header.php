@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-ng-app="articleApp">
+<html lang="en" data-ng-app="groupApp">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
 	<script src="<?php echo assets('js/bootstrap.min.js');?>"></script>
 
 </head>
-<body data-ng-controller="ArticleCtrl">
+<body data-ng-controller="groupCtrl">
 	<div class="container">
 		<div class="row">
 

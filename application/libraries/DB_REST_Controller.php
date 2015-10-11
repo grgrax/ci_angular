@@ -10,8 +10,8 @@ class DB_REST_Controller extends REST_Controller
             'hostname' =>'localhost',
             'username' => 'root',
             'password' => '',
-            'database' => 'db_ci_ang',
-            'dbdriver' => 'mysql'
+            'database' => 'db_simple_cms',
+            'dbdriver' => 'mysqli'
             );
         $this->db = $this->load->database($config, TRUE);
     }

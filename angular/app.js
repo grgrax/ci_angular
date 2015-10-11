@@ -1,9 +1,9 @@
-var articleApp = angular.module('articleApp', ['ngRoute']);
+var groupApp = angular.module('groupApp', ['ngRoute']);
 
-// http://www.amitavroy.com/justread/content/articles/ajax-data-using-angular-js-http-and-use-route-service-inside-codeigniter
-// var articleApp = angular.module('articleApp', ['ngRoute']);
+// http://www.amitavroy.com/justread/content/groups/ajax-data-using-angular-js-http-and-use-route-service-inside-codeigniter
+// var groupApp = angular.module('groupApp', ['ngRoute']);
 //routes
-articleApp.config(function($routeProvider){
+groupApp.config(function($routeProvider){
     $routeProvider
     .when('/',{
         templateUrl:'angular/static_views/home.html',
@@ -21,26 +21,25 @@ articleApp.config(function($routeProvider){
     })
 });
 
-// // //controllers
-articleApp.controller('mainController',function($scope){
+//controllers
+groupApp.controller('mainController',function($scope){
     $scope.message="home page";
 });
 
-articleApp.controller('aboutController',function($scope){
+groupApp.controller('aboutController',function($scope){
     $scope.message="about page";
 });
 
-// articleApp.controller('contactController',function($scope){
+// groupApp.controller('contactController',function($scope){
 //     $scope.message="contact page";
 // });
 
 
-articleApp.controller('ArticleCtrl', function ($scope, $http) {
+groupApp.controller('groupCtrl', function ($scope, $http) {
 
 
     $http.get('api/group/index').success(function(data){
-        console.log(data);
-        $scope.articles = data.data;
+        $scope.groups = data.data;
         $scope.all_status =[
         {key:'Unpublished',value:'Unpublished'},
         {key:'Published',value:'Published'},
@@ -50,34 +49,34 @@ articleApp.controller('ArticleCtrl', function ($scope, $http) {
         // {key:'2',value:'Active'},
         // {key:'3',value:'Deleted'}];
     }).error(function(data){
-        console.log(data);
-        $scope.articles = data;
+        $scope.groups = data;
     });
 
     $scope.refresh = function(){
-        $http.get('article/api/index').success(function(data){
-            $scope.articles = data;
+        $http.get('group/api/index').success(function(data){
+            $scope.groups = data;
         }).error(function(data){
-            $scope.articles = data;
+            $scope.groups = data;
         });
     }
 
-    $scope.addArticle = function(){
-        var newArticle = {'name': $scope.name,'content': $scope.content};
-        console.log(newArticle);
-        $http.post('article/api/add', newArticle).success(function(data){
-            $scope.refresh();
+    $scope.addgroup = function(){
+        var newgroup = {'name': $scope.name,'content': $scope.content};
+        console.log(newgroup);
+        $http.post('group/api/add', newgroup).success(function(data){
+            // $scope.refresh();
+            console.log(data);
             $scope.name = '';
             $scope.content = '';
         }).error(function(data){
-            alert(data.error);
+            console.log(data.error);
         });
     }
 
-    $scope.removeArticle = function(article){
-        var oldArticle = {'slug': article.slug};
-        console.log(oldArticle);
-        $http.post('article/api/remove', oldArticle).success(function(data){
+    $scope.removegroup = function(group){
+        var oldgroup = {'slug': group.slug};
+        console.log(oldgroup);
+        $http.post('group/api/remove', oldgroup).success(function(data){
             $scope.refresh();
             console.log(data);
         }).error(function(data){
@@ -85,10 +84,10 @@ articleApp.controller('ArticleCtrl', function ($scope, $http) {
         });
     }
 
-    $scope.publishArticle = function(article){
-        var oldArticle = {'slug': article.slug};
-        console.log(oldArticle);
-        $http.post('article/api/publish', oldArticle).success(function(data){
+    $scope.publishgroup = function(group){
+        var oldgroup = {'slug': group.slug};
+        console.log(oldgroup);
+        $http.post('group/api/publish', oldgroup).success(function(data){
             $scope.refresh();
             console.log(data);
         }).error(function(data){
@@ -96,20 +95,20 @@ articleApp.controller('ArticleCtrl', function ($scope, $http) {
         });
     }
 
-    $scope.loadArticle = function(slug){
+    $scope.loadgroup = function(slug){
         console.log(slug);
-        $http.get('article/api/index/'+slug).success(function(data){
+        $http.get('group/api/index/'+slug).success(function(data){
             console.log(data);
-            $scope.article = data;
+            $scope.group = data;
         }).error(function(data){
-            $scope.article = data;
+            $scope.group = data;
         });
     }
 
-    $scope.editArticle = function(article){
-        var oldArticle = {'name': article.name,'content': article.content};
-        console.log(oldArticle);
-        $http.put('article/api/edit', oldArticle).success(function(data){
+    $scope.editgroup = function(group){
+        var oldgroup = {'name': group.name,'content': group.content};
+        console.log(oldgroup);
+        $http.put('group/api/edit', oldgroup).success(function(data){
             $scope.refresh();
             console.log(data);
         }).error(function(data){

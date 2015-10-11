@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database','session','breadcrumb','form_validatio
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url','assets','text','flash');
+$autoload['helper'] = array('url','assets','flash');
 /*
 | -------------------------------------------------------------------
 |  Auto-load Config files

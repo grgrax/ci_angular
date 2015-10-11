@@ -36,7 +36,7 @@ class MY_Model extends CI_Model {
                 $this->db->order_by('id','desc');
             
             $rs = $this->db->get_where(static::$table, $param, $limit, $offset);
-            echo $this->db->last_query();
+            // echo $this->db->last_query();
             if($rs->num_rows()==1 or $limit==1)
                 return $rs->first_row('array');
             else
@@ -134,7 +134,7 @@ class MY_Model extends CI_Model {
             return static::$rules;
         }
         else{
-            $applied_rules=array();
+            $applied_rules=[];
             foreach(static::$rules as $rule){
                 if(in_array($rule['field'],$get_rules)){
                     $applied_rules[]=$rule;                 
