@@ -1,0 +1,15 @@
+	<h4>Add Group</h4>
+	<hr>
+	<form ng-show="add" ng-submit="addGroup(group)" role="form">
+		<div class="form-group">
+			<label for="">Name</label>
+			<input name="name" ng-model="group.name" type="text" class="form-control" id="" placeholder="admin">
+		</div>
+		<div class="form-group">
+			<label for="">Description</label>
+			<textarea name="desc" ng-model="group.desc" id="" class="form-control" cols="30" rows="3" placeholder="admin will manage"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+		<button type="submit" ng-click="cancelAddding()" class="btn btn-default">Cancel</button>
+	</form>
+

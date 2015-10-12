@@ -1,18 +1,17 @@
 var groupApp = angular.module('groupApp', ['ngRoute']);
 
 // http://www.amitavroy.com/justread/content/groups/ajax-data-using-angular-js-http-and-use-route-service-inside-codeigniter
-// var groupApp = angular.module('groupApp', ['ngRoute']);
 //routes
 groupApp.config(function($routeProvider){
     $routeProvider
     .when('/',{
-        templateUrl:'angular/static_views/home.html',
-        controller:'mainController'
+        templateUrl:'angular/module/group/views/list.html',
+        controller:'GroupController'
     })
 
     .when('/about',{
         templateUrl:'angular/static_views/about.html',
-        controller:'aboutController'
+        controller:'AboutController'
     })
 
     .when('/contact',{
@@ -22,58 +21,68 @@ groupApp.config(function($routeProvider){
 });
 
 //controllers
-groupApp.controller('mainController',function($scope){
-    $scope.message="home page";
-});
-
-groupApp.controller('aboutController',function($scope){
+groupApp.controller('AboutController',function($scope){
     $scope.message="about page";
 });
 
-// groupApp.controller('contactController',function($scope){
-//     $scope.message="contact page";
-// });
 
 
-groupApp.controller('groupCtrl', function ($scope, $http) {
+groupApp.controller('GroupController', function ($scope, $http) {
 
+    $scope.filterGroup='angular/module/group/views/filter.html'
+    
+    $scope.add=true;
+    $scope.addForm="angular/module/group/views/add.html";
+    
+    $scope.edit=false;
+    $scope.editForm="angular/module/group/views/edit.html";
 
-    $http.get('api/group/index').success(function(data){
-        $scope.groups = data.data;
-        $scope.all_status =[
-        {key:'Unpublished',value:'Unpublished'},
-        {key:'Published',value:'Published'},
-        {key:'Deleted',value:'Deleted'}];
-        // $scope.all_status =[
-        // {key:'1',value:'Unpublished'},
-        // {key:'2',value:'Active'},
-        // {key:'3',value:'Deleted'}];
-    }).error(function(data){
-        $scope.groups = data;
-    });
+    $scope.message="home page";
+    $scope.group_menu=true;
 
-    $scope.refresh = function(){
-        $http.get('group/api/index').success(function(data){
-            $scope.groups = data;
+    $scope.group=null;
+    // $scope.name=null;
+    // $scope.desc=null;
+
+    loadGroups();
+
+    function loadGroups(){
+        $http.get('api/group').success(function(data){
+            $scope.groups = data.data;
+            $scope.all_status =[
+            {key:'Active',value:'Active'},
+            {key:'Inactive',value:'Inactive'}
+            ];
         }).error(function(data){
             $scope.groups = data;
         });
     }
+    
+    $scope.refresh = function(){
+        loadGroups();
+    }
 
-    $scope.addgroup = function(){
-        var newgroup = {'name': $scope.name,'content': $scope.content};
-        console.log(newgroup);
-        $http.post('group/api/add', newgroup).success(function(data){
-            // $scope.refresh();
+    $scope.addGroup = function(group){
+        var newGroup = { name : group.name, desc : group.desc};
+        $http({
+          method  : 'POST',
+          url     : 'api/group/add',
+          data    : group,  
+          headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
+      })
+        .success(function(data){
             console.log(data);
-            $scope.name = '';
-            $scope.content = '';
+            loadGroups();
         }).error(function(data){
             console.log(data.error);
         });
     }
 
-    $scope.removegroup = function(group){
+    $scope.cancelAddding = function(){
+        $scope.group=null;
+    }
+
+    $scope.removeGroup = function(group){
         var oldgroup = {'slug': group.slug};
         console.log(oldgroup);
         $http.post('group/api/remove', oldgroup).success(function(data){
@@ -84,7 +93,7 @@ groupApp.controller('groupCtrl', function ($scope, $http) {
         });
     }
 
-    $scope.publishgroup = function(group){
+    $scope.publishGroup = function(group){
         var oldgroup = {'slug': group.slug};
         console.log(oldgroup);
         $http.post('group/api/publish', oldgroup).success(function(data){
@@ -95,19 +104,27 @@ groupApp.controller('groupCtrl', function ($scope, $http) {
         });
     }
 
-    $scope.loadgroup = function(slug){
-        console.log(slug);
-        $http.get('group/api/index/'+slug).success(function(data){
-            console.log(data);
-            $scope.group = data;
+    $scope.loadGroup = function(slug){
+        // console.log(slug);
+        $http.get('api/group?slug='+slug).success(function(data){
+            $scope.group = data.data;
+            $scope.add=false;
+            $scope.edit=true;
         }).error(function(data){
-            $scope.group = data;
+            alert(data.error);
         });
     }
 
-    $scope.editgroup = function(group){
-        var oldgroup = {'name': group.name,'content': group.content};
-        console.log(oldgroup);
+    $scope.cancelEditing = function(){
+        $scope.add=true;
+        $scope.edit=false;
+        $scope.group=null;
+    }
+
+
+    $scope.editGroup = function(group){
+        console.log(group);
+        return false;
         $http.put('group/api/edit', oldgroup).success(function(data){
             $scope.refresh();
             console.log(data);

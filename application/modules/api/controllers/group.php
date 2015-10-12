@@ -13,9 +13,9 @@ class group extends DB_REST_Controller
     function index_get()
     {        
         try {
-            if($this->get('id')){
-                $id=$this->get('id');
-                $get_response=$this->_get($id);
+            if($this->get('slug')){
+                $slug=$this->get('slug');
+                $get_response=$this->_get($slug);
                 if(!$get_response['success']) throw new Exception($get_response['data'], 1);
                 $group=$get_response['data'];
                 if(!$group) throw new Exception("No group found", 1);
@@ -37,10 +37,9 @@ class group extends DB_REST_Controller
             $model=$this->load->model('group/group_m');
 
             $data=array(
-                'name'=>$this->post('name'),
-                'desc'=>$this->post('desc'),
-                'slug'=>$this->post('name'),
-                // 'slug'=>get_slug($this->input->post('name')),
+                'name'=>$this->input->post('name'),
+                'desc'=>$this->input->post('desc'),
+                'slug'=>$this->input->post('name'),
                 'status'=>group_m::ACTIVE,
                 );
             $sucess=$model->create_row_n($data);
@@ -57,8 +56,8 @@ class group extends DB_REST_Controller
         try {
             $model=$this->load->model('group/group_m');
 
-            $id=$this->put('id');
-            $get_response=$this->_get($id);
+            $slug=$this->put('slug');
+            $get_response=$this->_get($slug);
             if(!$get_response['success']) throw new Exception($get_response['data'], 1);
             $group=$get_response['data'];
             
@@ -77,13 +76,13 @@ class group extends DB_REST_Controller
     }
 
 
-    function rem_delete()
+    function delete_post()
     {
         try {
             $model=$this->load->model('group/group_m');
 
-            $id=$this->get('id');
-            $get_response=$this->_get($id);
+            $slug=$this->post('slug');
+            $get_response=$this->_get($slug);
             if(!$get_response['success']) throw new Exception($get_response['data'], 1);
             $group=$get_response['data'];
             
@@ -99,25 +98,8 @@ class group extends DB_REST_Controller
         }
     }
 
-    function _get($id=FALSE){
-        $response['success']=false;
-        $response['data']='No id found';
-        if(!$id) 
-            return $response;
-        $param['id']=$id;
-        $group=$this->load->model('group/group_m')->read_row_by_n($param);
-        if($group) {
-            $response['success']=true;
-            $response['data']=$group;
-        }
-        else{
-            $response['data']='group not found';
-        }
-        return $response;
-    }
 
-
-    function _get_old($slug=FALSE){
+    function _get($slug=FALSE){
         $response['success']=false;
         $response['data']='No Slug found';
         if(!$slug) 

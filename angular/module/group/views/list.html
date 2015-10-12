@@ -1,0 +1,61 @@
+<div class="panel-heading" ng-controller="GroupController">
+	<h2>
+		Groups 
+		<span class="badge badge-info">{{groups.length}}</span>
+	</h2>
+	<hr>
+</div>
+
+<div class="panel-body">
+	
+	<div ng-include src="addForm"></div>
+	<div ng-include src="editForm"></div>
+
+	<div ng-include src="filterGroup"></div>
+
+	<hr>
+	<table class="table" ng-show="groups.length">
+		<thead>
+			<tr>
+				<th class="center">#</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Active</th>
+				<th>Created at</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="group in groups | filter:filter_name | filter:filter_content | filter:filter_date | filter:filter_status | orderBy : 'name'">
+				<td>{{$index+1}}</td>
+				<td>{{group.name}}</td>
+				<td>{{group.desc}}</td>
+				<td>
+					<span ng-if="group.status==1" class="label label-table label-success">
+						Yes
+					</span>
+					<span ng-if="group.status==2" class="label label-table label-warning">
+						No
+					</span>
+				</td>
+				<td>{{group.created_at}}</td>
+				<td style="text-align:center">
+					<span ng-if="group.status==1">
+						<a class="btn btn-xs btn-default"
+						ng-click="loadGroup(group.slug)"
+						>Edit</a>
+						&nbsp;
+						<a class="btn btn-xs btn-danger" 
+						ng-click="removeGroup(group.slug)">Delete</a>
+					</span>
+				</td>                    
+			</tr>
+		</tbody>
+	</table>
+	<hr>
+
+	<div ng-hide="groups.length" class="alert alert-default">
+		No groups found		
+	</div>
+</div>
+

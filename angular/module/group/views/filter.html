@@ -1,0 +1,24 @@
+<br>
+<h4>Filter</h4>
+<hr>
+<form role="form">
+	<div class="checkbox">
+		<label><input type="checkbox" ng-model="advanced_filter" checked="checked">Advanced Filter</label>
+	</div>   
+	<div class="col-sm-12 col-md-6 col-lg-4 form-group">
+		<input type="text" class="form-control" name="name" 
+		ng-model="filter_name" placeholder="By name" />
+	</div>   
+	<span ng-show="advanced_filter">
+		<div class="col-sm-12 col-md-6 col-lg-4 form-group">
+			<input type="text" class="form-control" name="date" 
+			ng-model="filter_date" placeholder="By date" />
+		</div>
+		<div class="col-sm-12 col-md-6 col-lg-4 form-group">
+			<select class="form-control" ng-model="filter_status">
+				<option value="" selected="selected">-- Select Status --</option>                        
+				<option ng-repeat="status in all_status" value="{{status.key}}">{{status.value}}</option>
+			</select>
+		</div>                
+	</span> 
+</form>
