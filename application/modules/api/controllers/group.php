@@ -51,21 +51,21 @@ class group extends DB_REST_Controller
 
     }
 
-    function edit_put()
+    function edit_post()
     {
         try {
             $model=$this->load->model('group/group_m');
 
-            $slug=$this->put('slug');
+            $slug=$this->input->post('slug');
             $get_response=$this->_get($slug);
             if(!$get_response['success']) throw new Exception($get_response['data'], 1);
             $group=$get_response['data'];
             
             if(!$group) throw new Exception("No group found", 1);
             $data=array(
-                'name'=>$this->put('name'),
-                'desc'=>$this->put('desc'),
-                'status'=>$this->put('status'),
+                'name'=>$this->input->post('name'),
+                'desc'=>$this->input->post('desc'),
+                'status'=>$this->input->post('status'),
                 );
             $sucess=$model->update_row_n($group['id'],$data);
             if(!$sucess) throw new Exception("Error while updating.", 1);                
@@ -81,7 +81,7 @@ class group extends DB_REST_Controller
         try {
             $model=$this->load->model('group/group_m');
 
-            $slug=$this->post('slug');
+            $slug=$this->input->post('slug');
             $get_response=$this->_get($slug);
             if(!$get_response['success']) throw new Exception($get_response['data'], 1);
             $group=$get_response['data'];

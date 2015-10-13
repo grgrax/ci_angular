@@ -41,18 +41,17 @@ groupApp.controller('GroupController', function ($scope, $http) {
     $scope.group_menu=true;
 
     $scope.group=null;
-    // $scope.name=null;
-    // $scope.desc=null;
+
+    $scope.groupStatus=[
+    {id: 1, name: "Yes"},
+    {id: 2, name: "No"}
+    ];
 
     loadGroups();
 
     function loadGroups(){
         $http.get('api/group').success(function(data){
             $scope.groups = data.data;
-            $scope.all_status =[
-            {key:'Active',value:'Active'},
-            {key:'Inactive',value:'Inactive'}
-            ];
         }).error(function(data){
             $scope.groups = data;
         });
@@ -81,30 +80,23 @@ groupApp.controller('GroupController', function ($scope, $http) {
         $scope.group=null;
     }
 
-    $scope.removeGroup = function(group){
-        var oldgroup = {'slug': group.slug};
-        console.log(oldgroup);
-        $http.post('group/api/remove', oldgroup).success(function(data){
-            $scope.refresh();
+    
+    $scope.editGroup = function(group){
+        $http({
+          method  : 'POST',
+          url     : 'api/group/delete',
+          headers : { 'Content-Type': 'application/x-www-form-urlencoded' },  
+          data: 'slug='+group.slug
+      })
+        .success(function(data){
             console.log(data);
+            loadGroups();
         }).error(function(data){
-            alert(data.error);
-        });
-    }
-
-    $scope.publishGroup = function(group){
-        var oldgroup = {'slug': group.slug};
-        console.log(oldgroup);
-        $http.post('group/api/publish', oldgroup).success(function(data){
-            $scope.refresh();
-            console.log(data);
-        }).error(function(data){
-            alert(data.error);
+            console.log(data.error);
         });
     }
 
     $scope.loadGroup = function(slug){
-        // console.log(slug);
         $http.get('api/group?slug='+slug).success(function(data){
             $scope.group = data.data;
             $scope.add=false;
@@ -120,16 +112,35 @@ groupApp.controller('GroupController', function ($scope, $http) {
         $scope.group=null;
     }
 
-
     $scope.editGroup = function(group){
-        console.log(group);
-        return false;
-        $http.put('group/api/edit', oldgroup).success(function(data){
-            $scope.refresh();
+        $http({
+          method  : 'POST',
+          url     : 'api/group/edit',
+          headers : { 'Content-Type': 'application/x-www-form-urlencoded' },  
+          data: 'slug='+group.slug+'&name='+group.name+'&desc='+group.desc+'&status='+group.status
+      })
+        .success(function(data){
             console.log(data);
+            loadGroups();
         }).error(function(data){
-            alert(data.error);
+            console.log(data.error);
         });
     }
+
+    $scope.deleteGroup = function(slug){
+        $http({
+          method  : 'POST',
+          url     : 'api/group/delete',
+          headers : { 'Content-Type': 'application/x-www-form-urlencoded' },  
+          data: 'slug='+slug
+      })
+        .success(function(data){
+            console.log(data);
+            loadGroups();
+        }).error(function(data){
+            console.log(data.error);
+        });
+    }
+
 
 });

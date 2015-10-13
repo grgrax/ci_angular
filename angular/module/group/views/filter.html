@@ -1,7 +1,5 @@
-<br>
-<h4>Filter</h4>
-<hr>
 <form role="form">
+	<legend>List of Groups</legend>
 	<div class="checkbox">
 		<label><input type="checkbox" ng-model="advanced_filter" checked="checked">Advanced Filter</label>
 	</div>   
@@ -15,9 +13,9 @@
 			ng-model="filter_date" placeholder="By date" />
 		</div>
 		<div class="col-sm-12 col-md-6 col-lg-4 form-group">
-			<select class="form-control" ng-model="filter_status">
+		<select name="" id="" class="form-control" ng-model="group.status">
 				<option value="" selected="selected">-- Select Status --</option>                        
-				<option ng-repeat="status in all_status" value="{{status.key}}">{{status.value}}</option>
+				<option ng-repeat="status in groupStatus" value="{{status.id}}">{{status.name}}</option>
 			</select>
 		</div>                
 	</span> 
