@@ -63,12 +63,11 @@ groupApp.controller('GroupController', function ($scope, $http) {
     }
 
     $scope.addGroup = function(group){
-        var newGroup = { name : group.name, desc : group.desc};
         $http({
           method  : 'POST',
           url     : 'api/group/add',
-          data    : group,  
-          headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  
+          headers : { 'Content-Type': 'application/x-www-form-urlencoded' },  
+          data: 'name='+group.name+'&desc='+group.desc
       })
         .success(function(data){
             console.log(data);
