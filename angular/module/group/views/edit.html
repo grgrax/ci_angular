@@ -1,4 +1,4 @@
-<form ng-show="edit" role="form" ng-submit="editGroup(group)">
+<form ng-show="edit" ng-submit="editGroup(group)">
 	<legend>Edit Group</legend>
 	<div class="form-group">
 		<label for="">Name</label>
@@ -16,6 +16,7 @@
 		</textarea>
 	</div>
 	<button type="submit" class="btn btn-primary">Submit</button>
-	<button type="submit" ng-click="cancelEditing()" class="btn btn-default">Cancel</button>
+	<button type="button" ng-click="resetForm()" class="btn btn-default">Reset</button>
+	<button type="button" ng-click="cancelEditing()" class="btn btn-default">Cancel</button>
 </form>
 

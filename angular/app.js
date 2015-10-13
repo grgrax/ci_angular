@@ -40,7 +40,8 @@ groupApp.controller('GroupController', function ($scope, $http) {
     $scope.message="home page";
     $scope.group_menu=true;
 
-    $scope.group=null;
+    $scope.group={};
+    $scope.currentGroup={};
 
     $scope.groupStatus=[
     {id: 1, name: "Yes"},
@@ -49,6 +50,20 @@ groupApp.controller('GroupController', function ($scope, $http) {
 
     loadGroups();
 
+    $scope.refresh = function(){
+        loadGroups();
+    }
+
+    $scope.resetForm = function(){
+        // if($scope.add){
+        //     console.log($scope);
+        //     // $scope.group.name=null;
+        // }else{
+        //     $scope.group = angular.copy($scope.currentGroup);
+        //     console.log($scope);
+        // }
+    }
+
     function loadGroups(){
         $http.get('api/group').success(function(data){
             $scope.groups = data.data;
@@ -56,11 +71,9 @@ groupApp.controller('GroupController', function ($scope, $http) {
             $scope.groups = data;
         });
     }
-    
-    $scope.refresh = function(){
-        loadGroups();
-    }
 
+
+    //add
     $scope.addGroup = function(group){
         $http({
           method  : 'POST',
@@ -76,40 +89,17 @@ groupApp.controller('GroupController', function ($scope, $http) {
         });
     }
 
-    $scope.cancelAddding = function(){
-        $scope.group=null;
-    }
-
     
-    $scope.editGroup = function(group){
-        $http({
-          method  : 'POST',
-          url     : 'api/group/delete',
-          headers : { 'Content-Type': 'application/x-www-form-urlencoded' },  
-          data: 'slug='+group.slug
-      })
-        .success(function(data){
-            console.log(data);
-            loadGroups();
-        }).error(function(data){
-            console.log(data.error);
-        });
-    }
-
+    //edit
     $scope.loadGroup = function(slug){
         $http.get('api/group?slug='+slug).success(function(data){
+            $scope.currentGroup = data.data;
             $scope.group = data.data;
             $scope.add=false;
             $scope.edit=true;
         }).error(function(data){
             alert(data.error);
         });
-    }
-
-    $scope.cancelEditing = function(){
-        $scope.add=true;
-        $scope.edit=false;
-        $scope.group=null;
     }
 
     $scope.editGroup = function(group){
@@ -127,20 +117,29 @@ groupApp.controller('GroupController', function ($scope, $http) {
         });
     }
 
-    $scope.deleteGroup = function(slug){
-        $http({
-          method  : 'POST',
-          url     : 'api/group/delete',
-          headers : { 'Content-Type': 'application/x-www-form-urlencoded' },  
-          data: 'slug='+slug
-      })
-        .success(function(data){
-            console.log(data);
-            loadGroups();
-        }).error(function(data){
-            console.log(data.error);
-        });
+    $scope.cancelEditing = function(){
+        $scope.add=true;
+        $scope.edit=false;
+        $scope.group={};
+        console.log($scope);
     }
 
+    //delete
+    $scope.deleteGroup = function(slug){
+        if(confirm('Are you sure want to delete')){
+            $http({
+              method  : 'POST',
+              url     : 'api/group/delete',
+              headers : { 'Content-Type': 'application/x-www-form-urlencoded' },  
+              data: 'slug='+slug
+          })
+            .success(function(data){
+                console.log(data);
+                loadGroups();
+            }).error(function(data){
+                console.log(data.error);
+            });          
+        }
+    }
 
 });
