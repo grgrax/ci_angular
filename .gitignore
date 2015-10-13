@@ -2,7 +2,7 @@
 uploads/
 application/config/development/
 application/config/production/
-application/database.php
+application/config/database.php
 
 #index.php
 
