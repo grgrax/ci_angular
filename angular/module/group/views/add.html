@@ -1,25 +1,24 @@
-<form ng-show="add" ng-submit="addGroup(group)" role="form" novalidate name="addGroup">
+<form name="addGroupForm" ng-show="add" ng-submit="addGroup(group)" novalidate >
 	<legend>Add Group</legend>
 	<div class="form-group">
 		<label for="">Name</label>
-		<input name="name" ng-model="group.name" type="text" class="form-control" placeholder="admin" required>
-		<span style="color:red" ng-show="addGroup.group.name.$dirty && addGroup.group.name.$invalid">
-			<span ng-show="addGroup.group.name.$error.required">Name is required.</span>
+		<input name="name" ng-model="group.name" required type="text" class="form-control" placeholder="admin">
+		<span style="color:red" ng-show="addGroupForm.name.$dirty && addGroupForm.name.$invalid">
+			<span ng-show="addGroupForm.name.$error.required">Name is required.</span>
 		</span>
 	</div>
-
-	<p>Username:<br>
-		<input type="text" name="user" ng-model="user" required>
-		<span style="color:red" ng-show="addGroup.user.$dirty && addGroup.user.$invalid">
-			<span ng-show="addGroup.user.$error.required">Username is required.</span>
-		</span>
-	</p>
 
 	<div class="form-group">
 		<label for="">Description</label>
-		<textarea name="desc" ng-model="group.desc" id="" class="form-control" cols="30" rows="3" placeholder="admin will manage"></textarea>
+		<textarea name="desc" ng-model="group.desc" required id="" class="form-control" cols="30" rows="3" placeholder="admin will manage"></textarea>
+		<span style="color:red" ng-show="addGroupForm.desc.$dirty && addGroupForm.name.$invalid">
+			<span ng-show="addGroupForm.desc.$error.required">Description is required.</span>
+		</span>
 	</div>
-	<button type="submit" class="btn btn-primary">Submit</button>
-	<button type="button" ng-click="resetForm()" class="btn btn-default">Cancel</button>
+	<button type="submit" class="btn btn-primary"
+	ng-disabled="addGroupForm.name.$dirty && addGroupForm.name.$invalid ||
+	addGroupForm.desc.$dirty && addGroupForm.desc.$invalid"
+	>Submit</button>
+	<button type="button" ng-click="resetForm()" class="btn btn-default">Reset</button>
 </form>
 

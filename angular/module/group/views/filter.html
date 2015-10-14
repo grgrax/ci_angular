@@ -13,8 +13,8 @@
 			ng-model="filter_date" placeholder="By date" />
 		</div>
 		<div class="col-sm-12 col-md-6 col-lg-4 form-group">
-		<select name="" id="" class="form-control" ng-model="group.status">
-				<option value="" selected="selected">-- Select Status --</option>                        
+		<select name="" id="" class="form-control" ng-model="filter_status">
+				<option value="" selected="selected">-- Is Active --</option>                        
 				<option ng-repeat="status in groupStatus" value="{{status.id}}">{{status.name}}</option>
 			</select>
 		</div>                

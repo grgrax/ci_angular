@@ -75,6 +75,7 @@ groupApp.controller('GroupController', function ($scope, $http) {
 
     //add
     $scope.addGroup = function(group){
+        console.log($scope);
         $http({
           method  : 'POST',
           url     : 'api/group/add',
