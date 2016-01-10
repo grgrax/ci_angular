@@ -8,3 +8,6 @@ demo app integrated with **angular**, **ci** (inspired by philip Rest Controller
 4. provide hostname,username,password,database at 
 	* application/config/database.php
 	* application/libraries/DB_REST_Controller.php
+5. visit http://localhost/ci_angular/#/
+
+*happy coding*
