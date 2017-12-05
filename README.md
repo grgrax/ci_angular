@@ -10,4 +10,4 @@ demo app integrated with **angular**, **ci** (inspired by philip Rest Controller
 	* application/libraries/DB_REST_Controller.php
 5. visit http://localhost/ci_angular/#/
 
-*happy coding*
+*happy coding**
